@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import {
   NavbarWrapper,
   SearchBar,
@@ -10,6 +10,7 @@ import {
 } from '../../styles/components/NavbarStyles';
 import NotificationDropdown from '../dropdowns/NotificationDropdown';
 import ProfileDropdown from '../dropdowns/ProfileDropdown';
+import useClickOutside from '../../hooks/useClickOutside';
 
 const Navbar = () => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -35,6 +36,12 @@ const Navbar = () => {
     }
   ]);
 
+  const closeNotifications = useCallback(() => setIsNotifOpen(false), []);
+  const closeProfile = useCallback(() => setIsProfileOpen(false), []);
+
+  const notificationRef = useClickOutside(closeNotifications);
+  const profileRef = useClickOutside(closeProfile);
+
   const handleMarkAsRead = (id) => {
     setNotifications(notifications.map(notif => 
       notif.id === id ? { ...notif, read: true } : notif
@@ -52,7 +59,7 @@ const Navbar = () => {
         <SearchInput placeholder="Search..." />
       </SearchBar>
       <NavActions>
-        <div style={{ position: 'relative' }}>
+        <div ref={notificationRef} style={{ position: 'relative' }}>
           <NotificationIcon onClick={() => {
             setIsNotifOpen(!isNotifOpen);
             setIsProfileOpen(false);
@@ -65,7 +72,7 @@ const Navbar = () => {
             onMarkAsRead={handleMarkAsRead}
           />
         </div>
-        <div style={{ position: 'relative' }}>
+        <div ref={profileRef} style={{ position: 'relative' }}>
           <ProfileSection onClick={() => {
             setIsProfileOpen(!isProfileOpen);
             setIsNotifOpen(false);
