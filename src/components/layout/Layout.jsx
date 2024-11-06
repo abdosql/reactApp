@@ -1,7 +1,11 @@
 import React from 'react';
 import Sidebar from './Sidebar';
 import Navbar from './Navbar';
-import styled from 'styled-components';
+import {
+  LayoutWrapper,
+  MainContent,
+  PageContent
+} from '../../styles/components/LayoutStyles';
 
 const Layout = ({ children }) => {
   return (
@@ -16,23 +20,5 @@ const Layout = ({ children }) => {
     </LayoutWrapper>
   );
 };
-
-const LayoutWrapper = styled.div`
-  display: flex;
-  min-height: 100vh;
-  background-color: #f8f9fa;
-`;
-
-const MainContent = styled.div`
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-`;
-
-const PageContent = styled.main`
-  flex: 1;
-  padding: 2rem;
-  background-color: #ffffff;
-`;
 
 export default Layout; 
