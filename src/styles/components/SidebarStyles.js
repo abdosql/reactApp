@@ -14,6 +14,9 @@ export const Logo = styled.div`
   padding: 1rem 0;
   border-bottom: 1px solid rgba(185, 224, 255, 0.1);
   margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 `;
 
 export const LogoText = styled.h1`

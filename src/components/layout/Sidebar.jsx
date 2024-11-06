@@ -1,9 +1,10 @@
 import React from 'react';
 import { RiDashboardLine, RiTempHotLine, RiWaterPercentLine, 
          RiMapPinLine, RiHistoryLine, RiTeamLine, RiSettings4Line } from 'react-icons/ri';
+import Logo from '../common/Logo';
 import {
   SidebarWrapper,
-  Logo,
+  Logo as LogoContainer,
   LogoText,
   NavItems,
   NavItem
@@ -12,9 +13,10 @@ import {
 const Sidebar = () => {
   return (
     <SidebarWrapper>
-      <Logo>
-        <LogoText>App Logo</LogoText>
-      </Logo>
+      <LogoContainer>
+        <Logo />
+{/*         <LogoText>ClimaSync</LogoText>
+ */}      </LogoContainer>
       <NavItems>
         <NavItem active>
           <RiDashboardLine /> Dashboard
