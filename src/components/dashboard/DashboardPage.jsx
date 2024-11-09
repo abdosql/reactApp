@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import AlertTable from '../data/tables/AlertTable';
+import OperatorsTable from '../data/tables/OperatorsTable';
 
 const DashboardPage = () => {
   return (
@@ -11,7 +13,7 @@ const DashboardPage = () => {
       
       {/* Placeholder for dashboard content */}
       <DashboardContent>
-        {/* Your dashboard cards and graphs will go here */}
+        <OperatorsTable />
       </DashboardContent>
     </DashboardContainer>
   );
