@@ -3,7 +3,7 @@ import styled from 'styled-components';
 
 const Logo = () => (
   <LogoImage 
-    src="/assets/logo.png" 
+    src="/assets/logo.svg" 
     alt="Logo" 
   />
 );
