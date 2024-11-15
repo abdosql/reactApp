@@ -1,22 +1,18 @@
 import React from 'react';
-import { CardWrapper, CardTitle, CardValue, IconWrapper, FirstWrapper,SecondWrapper, Label} from '../../../styles/components/StatsCardStyles';
+import StatsCard from '../../common/StatsCard';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faTemperatureHalf } from '@fortawesome/free-solid-svg-icons';
-const TemperatureCard = ({ title, value, time }) => {
-  const label = time ? `Updated ${time} minutes ago` : "No update yet";
+
+const TemperatureCard = ({ value, time }) => {
   return (
-    <CardWrapper>
-       <FirstWrapper>
-       <SecondWrapper>
-          <CardTitle>{title}</CardTitle>
-          <CardValue>{value}°C</CardValue>
-        </SecondWrapper>
-      <IconWrapper style={{ backgroundColor: '#ff6b6b' }}> {/* Unique background color */}
-        <FontAwesomeIcon icon={faTemperatureHalf} size="1x" />
-      </IconWrapper> 
-      </FirstWrapper>
-      <Label>{label}</Label>
-    </CardWrapper>
+    <StatsCard
+      title="Temperature"
+      value={value}
+      label={`Last updated ${time} minutes ago`}
+      icon={<FontAwesomeIcon icon={faTemperatureHalf} size="1x" />}
+      iconStyle={{ backgroundColor: '#ff6b6b' }}
+      unit="°C"
+    />
   );
 };
 

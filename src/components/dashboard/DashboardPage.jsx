@@ -30,10 +30,10 @@ const DashboardPage = () => {
       <DashboardContent>
         {/* Your dashboard cards and graphs will go here */}
         <CardsSection>
-          <StatsCard CardComponent={TemperatureCard} title="Temperature" value={24} time={timeSinceUpdate}/>
-          <StatsCard CardComponent={HumidityCard} title="Humidity" value={250} time={timeSinceUpdate}/>
-          <StatsCard CardComponent={AverageTemperatureCard} title="Average Temperature" value={10} />
-          <StatsCard CardComponent={AverageHumidityCard} title="Average Humidity" value={200} />
+          <TemperatureCard value={24} time={timeSinceUpdate} />
+          <HumidityCard value={250} time={timeSinceUpdate} />
+          <AverageTemperatureCard value={10} />
+          <AverageHumidityCard value={200} />
         </CardsSection>
       </DashboardContent>
     </DashboardContainer>
