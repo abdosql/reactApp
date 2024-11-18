@@ -2,6 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import AlertTable from '../data/tables/AlertTable';
 import OperatorsTable from '../data/tables/OperatorsTable';
+import SensorsTable from '../data/tables/SensorsTable';
 
 const DashboardPage = () => {
   return (
@@ -13,7 +14,7 @@ const DashboardPage = () => {
       
       {/* Placeholder for dashboard content */}
       <DashboardContent>
-        <OperatorsTable />
+        <SensorsTable />
       </DashboardContent>
     </DashboardContainer>
   );
