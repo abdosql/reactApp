@@ -1,10 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
+
+
+import StatsCard from '../common/StatsCard';
+import TemperatureCard from './States/TemperatureCard';
+import HumidityCard from './States/HumidityCard';
+import AverageHumidityCard from './States/AverageHumidityCard';
+import AverageTemperatureCard from './States/AverageTemperatureCard';
+import {CardsSection} from '../../styles/components/StatsCardStyles';
+import { useState, useEffect } from 'react';
 import AlertTable from '../data/tables/AlertTable';
 import OperatorsTable from '../data/tables/OperatorsTable';
 import SensorsTable from '../data/tables/SensorsTable';
 
+
 const DashboardPage = () => {
+  const [timeSinceUpdate, setTimeSinceUpdate] = useState(0);
+
+  useEffect(() => {
+    const updateTime = () => {
+      setTimeSinceUpdate((prevTime) => (prevTime < 20 ? prevTime + 1 : 0));
+    };
+    // Increment time every minute; reset every 20 mins
+    const interval = setInterval(updateTime, 60000); // 60000ms = 1 minute
+    return () => clearInterval(interval);
+  }, []);
+
   return (
     <DashboardContainer>
       <DashboardHeader>
@@ -14,7 +35,6 @@ const DashboardPage = () => {
       
       {/* Placeholder for dashboard content */}
       <DashboardContent>
-        <SensorsTable />
       </DashboardContent>
     </DashboardContainer>
   );
