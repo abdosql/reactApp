@@ -15,11 +15,10 @@ function App() {
   ];
 
   return (
-   /* <Layout breadcrumbItems={breadcrumbItems}>
+    <Layout breadcrumbItems={breadcrumbItems}>
       <DashboardPage />
-    </Layout>*/
-    <AuthContainer/>
-  );
+    </Layout>
+  )
 }
 
 export default App;
