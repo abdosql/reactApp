@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Table from '../../common/Table';
+import AddButton from '../../common/AddButton';
 import styled from 'styled-components';
 import { RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
 import AddItemModal from '../../modals/AddItemModal';
@@ -73,13 +74,20 @@ const SensorsTable = () => {
   );
 
   return (
-    <>
+    <TableContainer>
       <Table 
         columns={columns} 
         data={data} 
         actions={actions}
         onRowClick={(row) => console.log('Row clicked:', row)}
       />
+      
+      <TableFooter>
+        <AddButton 
+          onClick={() => setIsAddModalOpen(true)} 
+          label="Add Sensor"
+        />
+      </TableFooter>
 
       <AddItemModal
         isOpen={isAddModalOpen}
@@ -102,9 +110,27 @@ const SensorsTable = () => {
         onConfirm={handleDelete}
         itemName={selectedItem?.id}
       />
-    </>
+    </TableContainer>
   );
 };
+
+const TableContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+`;
+
+const TableFooter = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 1rem;
+`;
 
 const StatusBadge = styled.span`
   padding: 0.25rem 0.5rem;
