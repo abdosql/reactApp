@@ -1,9 +1,18 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Table from '../../common/Table';
+import AddButton from '../../common/AddButton';
 import styled from 'styled-components';
 import { RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
+import AddItemModal from '../../modals/AddItemModal';
+import EditModal from '../../modals/EditModal';
+import DeleteModal from '../../modals/DeleteModal';
 
 const SensorsTable = () => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(null);
+
   const columns = [
     { header: 'Sensor ID', accessor: 'id' },
     { header: 'Location', accessor: 'location' },
@@ -25,26 +34,103 @@ const SensorsTable = () => {
     // Add more sample data as needed
   ];
 
+  const fields = [
+    { name: 'id', label: 'Sensor ID', required: true },
+    { name: 'location', label: 'Location', required: true },
+    { name: 'type', label: 'Type', required: true },
+  ];
+
+  const handleAdd = (formData) => {
+    console.log('Adding:', formData);
+    // Implement add logic
+  };
+
+  const handleEdit = (formData) => {
+    console.log('Editing:', formData);
+    // Implement edit logic
+  };
+
+  const handleDelete = () => {
+    console.log('Deleting:', selectedItem);
+    // Implement delete logic
+    setIsDeleteModalOpen(false);
+  };
+
   const actions = (row) => (
     <>
-      <ActionButton onClick={() => console.log('Edit', row)}>
+      <ActionButton onClick={() => {
+        setSelectedItem(row);
+        setIsEditModalOpen(true);
+      }}>
         <RiEditLine />
       </ActionButton>
-      <ActionButton danger onClick={() => console.log('Delete', row)}>
+      <ActionButton danger onClick={() => {
+        setSelectedItem(row);
+        setIsDeleteModalOpen(true);
+      }}>
         <RiDeleteBinLine />
       </ActionButton>
     </>
   );
 
   return (
-    <Table 
-      columns={columns} 
-      data={data} 
-      actions={actions}
-      onRowClick={(row) => console.log('Row clicked:', row)}
-    />
+    <TableContainer>
+      <Table 
+        columns={columns} 
+        data={data} 
+        actions={actions}
+        onRowClick={(row) => console.log('Row clicked:', row)}
+      />
+      
+      <TableFooter>
+        <AddButton 
+          onClick={() => setIsAddModalOpen(true)} 
+          label="Add Sensor"
+        />
+      </TableFooter>
+
+      <AddItemModal
+        isOpen={isAddModalOpen}
+        onClose={() => setIsAddModalOpen(false)}
+        onSubmit={handleAdd}
+        fields={fields}
+      />
+
+      <EditModal
+        isOpen={isEditModalOpen}
+        onClose={() => setIsEditModalOpen(false)}
+        onSubmit={handleEdit}
+        fields={fields}
+        initialData={selectedItem}
+      />
+
+      <DeleteModal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        onConfirm={handleDelete}
+        itemName={selectedItem?.id}
+      />
+    </TableContainer>
   );
 };
+
+const TableContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+`;
+
+const TableFooter = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 1rem;
+`;
 
 const StatusBadge = styled.span`
   padding: 0.25rem 0.5rem;

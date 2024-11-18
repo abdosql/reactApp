@@ -1,9 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Table from '../../common/Table';
 import styled from 'styled-components';
 import { RiEyeLine, RiDeleteBinLine } from 'react-icons/ri';
+import AddButton from '../../common/AddButton';
 
 const AlertTable = () => {
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+
   const columns = [
     { header: 'Date', accessor: 'date' },
     { header: 'Type', accessor: 'type' },
@@ -36,12 +39,21 @@ const AlertTable = () => {
   );
 
   return (
-    <Table 
-      columns={columns} 
-      data={data} 
-      actions={actions}
-      onRowClick={(row) => console.log('Row clicked:', row)}
-    />
+    <TableContainer>
+      <Table 
+        columns={columns} 
+        data={data} 
+        actions={actions}
+        onRowClick={(row) => console.log('Row clicked:', row)}
+      />
+      
+      <TableFooter>
+        <AddButton 
+          onClick={() => setIsAddModalOpen(true)} 
+          label="Add Alert"
+        />
+      </TableFooter>
+    </TableContainer>
   );
 };
 
@@ -77,6 +89,24 @@ const ActionButton = styled.button`
   &:hover {
     opacity: 0.7;
   }
+`;
+
+const TableContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+`;
+
+const TableFooter = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  padding-top: 1rem;
+  border-top: 1px solid #e2e8f0;
+  margin-top: 1rem;
 `;
 
 export default AlertTable; 

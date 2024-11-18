@@ -35,6 +35,7 @@ const DashboardPage = () => {
       
       {/* Placeholder for dashboard content */}
       <DashboardContent>
+        <SensorsTable/>
       </DashboardContent>
     </DashboardContainer>
   );

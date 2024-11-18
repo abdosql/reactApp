@@ -5,7 +5,6 @@ import Logo from '../common/Logo';
 import {
   SidebarWrapper,
   Logo as LogoContainer,
-  LogoText,
   NavItems,
   NavItem
 } from '../../styles/components/SidebarStyles';
@@ -15,8 +14,7 @@ const Sidebar = () => {
     <SidebarWrapper>
       <LogoContainer>
         <Logo />
-{/*         <LogoText>ClimaSync</LogoText>
- */}      </LogoContainer>
+      </LogoContainer>
       <NavItems>
         <NavItem active>
           <RiDashboardLine /> Dashboard
