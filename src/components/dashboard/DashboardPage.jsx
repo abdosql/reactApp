@@ -11,6 +11,7 @@ import {CardsSection} from '../../styles/components/StatsCardStyles';
 import { useState, useEffect } from 'react';
 import AlertTable from '../data/tables/AlertTable';
 import OperatorsTable from '../data/tables/OperatorsTable';
+import SensorsTable from '../data/tables/SensorsTable';
 
 
 const DashboardPage = () => {
@@ -34,7 +35,6 @@ const DashboardPage = () => {
       
       {/* Placeholder for dashboard content */}
       <DashboardContent>
-
       </DashboardContent>
     </DashboardContainer>
   );
