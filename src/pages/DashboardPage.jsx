@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import Layout from '../components/layout/Layout';
 import styled from 'styled-components';
 import StatsCard from '../components/common/StatsCard';
 import TemperatureCard from '../components/dashboard/States/TemperatureCard';
@@ -34,38 +33,36 @@ const DashboardPage = () => {
   }, []);
 
   return (
-    <Layout breadcrumbItems={breadcrumbItems}>
-      <PageContainer>
-        <PageHeader>
-          <Title>Dashboard Overview</Title>
-          <Subtitle>Welcome to your monitoring dashboard</Subtitle>
-        </PageHeader>
-        
-        <PageContent>
-          <CardsSection>
-            <TemperatureCard value="24.5" time={timeSinceUpdate} />
-            <HumidityCard value="65" time={timeSinceUpdate} />
-            <AverageTemperatureCard value="23.8" />
-            <AverageHumidityCard value="62" />
-          </CardsSection>
+    <PageContainer>
+      <PageHeader>
+        <Title>Dashboard Overview</Title>
+        <Subtitle>Welcome to your monitoring dashboard</Subtitle>
+      </PageHeader>
+      
+      <PageContent>
+        <CardsSection>
+          <TemperatureCard value="24.5" time={timeSinceUpdate} />
+          <HumidityCard value="65" time={timeSinceUpdate} />
+          <AverageTemperatureCard value="23.8" />
+          <AverageHumidityCard value="62" />
+        </CardsSection>
 
-          <Section>
-            <SectionTitle>Recent Alerts</SectionTitle>
-            <AlertTable />
-          </Section>
+        <Section>
+          <SectionTitle>Recent Alerts</SectionTitle>
+          <AlertTable />
+        </Section>
 
-          <Section>
-            <SectionTitle>Sensors Overview</SectionTitle>
-            <SensorsTable />
-          </Section>
+        <Section>
+          <SectionTitle>Sensors Overview</SectionTitle>
+          <SensorsTable />
+        </Section>
 
-          <Section>
-            <SectionTitle>Active Operators</SectionTitle>
-            <OperatorsTable />
-          </Section>
-        </PageContent>
-      </PageContainer>
-    </Layout>
+        <Section>
+          <SectionTitle>Active Operators</SectionTitle>
+          <OperatorsTable />
+        </Section>
+      </PageContent>
+    </PageContainer>
   );
 };
 

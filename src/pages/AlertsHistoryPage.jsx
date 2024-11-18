@@ -1,31 +1,19 @@
 import React from 'react';
-import Layout from '../components/layout/Layout';
 import styled from 'styled-components';
 import AlertTable from '../components/data/tables/AlertTable';
 
 const AlertsHistoryPage = () => {
-  const breadcrumbItems = [
-    {
-      label: 'Home',
-      onClick: () => console.log('Navigate to Home')
-    },
-    {
-      label: 'Alerts History',
-    }
-  ];
-
   return (
-    <Layout breadcrumbItems={breadcrumbItems}>
-      <PageContainer>
-        <PageHeader>
-          <Title>Alerts History</Title>
-          <Subtitle>View and manage system alerts</Subtitle>
-        </PageHeader>
-        
-        <PageContent>
-        </PageContent>
-      </PageContainer>
-    </Layout>
+    <PageContainer>
+      <PageHeader>
+        <Title>Alerts History</Title>
+        <Subtitle>View and manage system alerts</Subtitle>
+      </PageHeader>
+      
+      <PageContent>
+        <AlertTable />
+      </PageContent>
+    </PageContainer>
   );
 };
 

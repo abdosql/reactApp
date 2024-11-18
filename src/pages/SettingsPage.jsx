@@ -1,31 +1,18 @@
 import React from 'react';
-import Layout from '../components/layout/Layout';
 import styled from 'styled-components';
 
 const SettingsPage = () => {
-  const breadcrumbItems = [
-    {
-      label: 'Home',
-      onClick: () => console.log('Navigate to Home')
-    },
-    {
-      label: 'Settings',
-    }
-  ];
-
   return (
-    <Layout breadcrumbItems={breadcrumbItems}>
-      <PageContainer>
-        <PageHeader>
-          <Title>System Settings</Title>
-          <Subtitle>Configure system preferences and options</Subtitle>
-        </PageHeader>
-        
-        <PageContent>
-          {/* Settings content will go here */}
-        </PageContent>
-      </PageContainer>
-    </Layout>
+    <PageContainer>
+      <PageHeader>
+        <Title>System Settings</Title>
+        <Subtitle>Configure system preferences and options</Subtitle>
+      </PageHeader>
+      
+      <PageContent>
+        {/* Settings content will go here */}
+      </PageContent>
+    </PageContainer>
   );
 };
 

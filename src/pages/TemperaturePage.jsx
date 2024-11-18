@@ -1,31 +1,18 @@
 import React from 'react';
-import Layout from '../components/layout/Layout';
 import styled from 'styled-components';
 
 const TemperaturePage = () => {
-  const breadcrumbItems = [
-    {
-      label: 'Home',
-      onClick: () => console.log('Navigate to Home')
-    },
-    {
-      label: 'Temperature',
-    }
-  ];
-
   return (
-    <Layout breadcrumbItems={breadcrumbItems}>
-      <PageContainer>
-        <PageHeader>
-          <Title>Temperature Monitoring</Title>
-          <Subtitle>Monitor and manage temperature sensors</Subtitle>
-        </PageHeader>
-        
-        <PageContent>
-          {/* Temperature content will go here */}
-        </PageContent>
-      </PageContainer>
-    </Layout>
+    <PageContainer>
+      <PageHeader>
+        <Title>Temperature Monitoring</Title>
+        <Subtitle>Monitor and manage temperature sensors</Subtitle>
+      </PageHeader>
+      
+      <PageContent>
+        {/* Temperature content will go here */}
+      </PageContent>
+    </PageContainer>
   );
 };
 

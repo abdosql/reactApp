@@ -1,16 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
+import { LogoImage } from '../../styles/components/LogoStyles';
 
-const Logo = () => (
-  <LogoImage 
-    src="/assets/logo.svg" 
-    alt="Logo" 
-  />
-);
+const Logo = React.memo(() => <LogoImage />);
 
-const LogoImage = styled.img`
-  width: 10rem;
-  height: auto;
-`;
+Logo.displayName = 'Logo';
 
 export default Logo; 

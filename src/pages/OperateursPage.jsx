@@ -1,31 +1,19 @@
 import React from 'react';
-import Layout from '../components/layout/Layout';
 import styled from 'styled-components';
 import OperatorsTable from '../components/data/tables/OperatorsTable';
 
 const OperateursPage = () => {
-  const breadcrumbItems = [
-    {
-      label: 'Home',
-      onClick: () => console.log('Navigate to Home')
-    },
-    {
-      label: 'Operateurs',
-    }
-  ];
-
   return (
-    <Layout breadcrumbItems={breadcrumbItems}>
-      <PageContainer>
-        <PageHeader>
-          <Title>Operators Management</Title>
-          <Subtitle>Manage system operators and their permissions</Subtitle>
-        </PageHeader>
-        
-        <PageContent>
-        </PageContent>
-      </PageContainer>
-    </Layout>
+    <PageContainer>
+      <PageHeader>
+        <Title>Operators Management</Title>
+        <Subtitle>Manage system operators and their permissions</Subtitle>
+      </PageHeader>
+      
+      <PageContent>
+        <OperatorsTable />
+      </PageContent>
+    </PageContainer>
   );
 };
 

@@ -4,7 +4,7 @@ export const SidebarWrapper = styled.aside`
   width: 260px;
   background-color: #8d72e1;
   color: white;
-  padding: 1.5rem;
+  padding: 1rem;
   display: flex;
   flex-direction: column;
   gap: 2rem;
@@ -16,6 +16,7 @@ export const Logo = styled.div`
   margin-bottom: 1rem;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.75rem;
 `;
 

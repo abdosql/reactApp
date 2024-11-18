@@ -1,31 +1,18 @@
 import React from 'react';
-import Layout from '../components/layout/Layout';
 import styled from 'styled-components';
 
 const HumidityPage = () => {
-  const breadcrumbItems = [
-    {
-      label: 'Home',
-      onClick: () => console.log('Navigate to Home')
-    },
-    {
-      label: 'Humidity',
-    }
-  ];
-
   return (
-    <Layout breadcrumbItems={breadcrumbItems}>
-      <PageContainer>
-        <PageHeader>
-          <Title>Humidity Monitoring</Title>
-          <Subtitle>Monitor and manage humidity sensors</Subtitle>
-        </PageHeader>
-        
-        <PageContent>
-          {/* Humidity content will go here */}
-        </PageContent>
-      </PageContainer>
-    </Layout>
+    <PageContainer>
+      <PageHeader>
+        <Title>Humidity Monitoring</Title>
+        <Subtitle>Monitor and manage humidity sensors</Subtitle>
+      </PageHeader>
+      
+      <PageContent>
+        {/* Humidity content will go here */}
+      </PageContent>
+    </PageContainer>
   );
 };
 
