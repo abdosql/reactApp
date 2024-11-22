@@ -1,8 +1,8 @@
 import React from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
-import { MapTitle, MapSection } from '../../styles/components/MapViewStyles';
+import { MapTitle, MapSection,PopupTitle, PopupElement,PopupName,PopupLocation } from '../../styles/components/MapViewStyles';
 
-const MapView = ({ latitude, longitude }) => {
+const MapView = ({ latitude, longitude, sensorName, sensorTemperature, sensorHumidity }) => {
   const position = [latitude, longitude];
 
   return (
@@ -15,7 +15,11 @@ const MapView = ({ latitude, longitude }) => {
             />
             <Marker position={position}>
               <Popup>
-                Latitude: {latitude}, Longitude: {longitude}
+                <PopupTitle>
+                  <PopupName>{sensorName}</PopupName> 
+                  <PopupLocation>({latitude},{longitude})</PopupLocation>
+                </PopupTitle>
+                <PopupElement></PopupElement>
               </Popup>
             </Marker>
       </MapContainer>

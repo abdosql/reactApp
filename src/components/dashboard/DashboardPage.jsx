@@ -32,7 +32,7 @@ const DashboardPage = () => {
 
       </DashboardHeader>
       
-      <MapView latitude={latitude} longitude={longitude} />
+      <MapView latitude={latitude} longitude={longitude} sensorName="ESP6682"/>
       <DashboardContent>
 
       </DashboardContent>
