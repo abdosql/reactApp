@@ -19,7 +19,8 @@ const MapView = ({ latitude, longitude, sensorName, sensorTemperature, sensorHum
                   <PopupName>{sensorName}</PopupName> 
                   <PopupLocation>({latitude},{longitude})</PopupLocation>
                 </PopupTitle>
-                <PopupElement></PopupElement>
+                <PopupElement>Temperature : {sensorTemperature}°C</PopupElement>
+                <PopupElement>Humidity : {sensorHumidity}%</PopupElement>
               </Popup>
             </Marker>
       </MapContainer>

@@ -15,10 +15,13 @@ border-radius:8px;
 export const PopupTitle = styled.div`
 display:flex;
 gap:5px;
+padding-bottom:5px;
 `;
 
 export const PopupElement = styled.div`
-
+padding-left:10px;
+padding-top:5px;
+text-align:center;
 `;
 
 export const PopupName = styled.div`
