@@ -13,6 +13,7 @@ import AlertTable from '../data/tables/AlertTable';
 import OperatorsTable from '../data/tables/OperatorsTable';
 import SensorsTable from '../data/tables/SensorsTable';
 
+import MapView from '../common/MapView';
 
 const DashboardPage = () => {
   const [timeSinceUpdate, setTimeSinceUpdate] = useState(0);
@@ -25,15 +26,15 @@ const DashboardPage = () => {
     const interval = setInterval(updateTime, 60000); // 60000ms = 1 minute
     return () => clearInterval(interval);
   }, []);
-
+    const latitude = 34.657467; // Replace with your latitude
+    const longitude = -1.907816; 
   return (
     <DashboardContainer>
       <DashboardHeader>
-        <Title>Dashboard Overview</Title>
-        <Subtitle>Welcome to your monitoring dashboard</Subtitle>
+
       </DashboardHeader>
       
-      {/* Placeholder for dashboard content */}
+      <MapView latitude={latitude} longitude={longitude} sensorName="ESP6682"/>
       <DashboardContent>
         <SensorsTable/>
       </DashboardContent>
