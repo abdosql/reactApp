@@ -87,7 +87,7 @@ export const StatDetails = styled.div`
   font-size: 0.875rem;
   color: #4a4a4a;
   width: 100%;
-  gap: 10px;
+  gap: 5px;
 `;
 
 export const StatValue = styled.span`
