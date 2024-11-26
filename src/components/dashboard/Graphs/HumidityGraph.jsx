@@ -1,6 +1,7 @@
 import React from 'react';
 import Calendar from '../../data/calendar/Calendar';
 import Graph from '../../common/Graph';
+import ExportToCSV from '../../data/csv/ExportToCSV'; 
 
 const HumidityGraph = ({ data, dateRange, onDateChange }) => {
   return (
@@ -10,9 +11,22 @@ const HumidityGraph = ({ data, dateRange, onDateChange }) => {
         <Calendar onDateSelect={onDateChange} />
       </div>
 
+     
       <div 
-        style={{ flex: '2', display: 'flex', justifyContent: 'center', maxWidth: '60%' }}
+        style={{ flex: '2', display: 'flex', flexDirection: 'column', justifyContent: 'center', maxWidth: '55%' }}
       >
+        <div style={{
+          alignSelf: 'flex-end',
+          marginBottom: '1rem', 
+          marginRight: '30px',
+        }}>
+          <ExportToCSV 
+            data={data} 
+            dateRange={dateRange} 
+            type="humidity" 
+          />
+        </div>
+
         <Graph data={data} type="humidity" dateRange={dateRange} />
       </div>
     </div>

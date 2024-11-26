@@ -1,6 +1,7 @@
 import React from 'react';
-import Graph from '../../common/Graph'
+import Graph from '../../common/Graph';
 import StatsDisplay from '../../common/MaxMinAvgDisplay';
+import ExportToCSV from '../../data/csv/ExportToCSV'; 
 
 const calculateStats = (data) => {
   const stats = {
@@ -29,21 +30,35 @@ const TempHumGraph = ({ data, dateRange, selectedType, onTypeChange }) => {
     ? data 
     : data.filter(d => d.type === selectedType);
 
-    return (
-      <div style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem', alignItems: 'center' }}>
-        <div style={{ flex: '0.7' }}>
-          <Graph data={filteredData} type={selectedType} dateRange={dateRange} />
-        </div>
-  
-        <div style={{ flex: '0.5', borderRadius: '8px' }}>
-          <StatsDisplay 
-            type={selectedType} 
-            stats={calculateStats(data)} 
-            onChangeType={onTypeChange} 
+  return (
+    <div style={{ display: 'flex', justifyContent: 'space-between', gap: '2rem', alignItems: 'center' }}>
+      
+      <div style={{ flex: '0.7', display: 'flex', flexDirection: 'column', justifyContent: 'flex-start' }}>
+        
+        <div style={{
+          alignSelf: 'flex-end',
+          marginBottom: '1rem',
+          marginRight: '30px', 
+        }}>
+          <ExportToCSV 
+            data={data} 
+            dateRange={dateRange} 
+            type="all"  
           />
         </div>
+
+        <Graph data={filteredData} type={selectedType} dateRange={dateRange} />
       </div>
-    );
-  };
+
+      <div style={{ flex: '0.5', borderRadius: '8px' }}>
+        <StatsDisplay 
+          type={selectedType} 
+          stats={calculateStats(data)} 
+          onChangeType={onTypeChange} 
+        />
+      </div>
+    </div>
+  );
+};
 
 export default TempHumGraph;

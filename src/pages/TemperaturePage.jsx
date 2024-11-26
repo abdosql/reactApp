@@ -58,6 +58,21 @@ const initialData = [
   { date: '2024-11-21T12:00', type: 'humidity', value: 66 },
   { date: '2024-11-21T18:00', type: 'temperature', value: 16 },
   { date: '2024-11-21T18:00', type: 'humidity', value: 70 },
+
+  // 2024-11-21
+  { date: '2024-11-22T08:00', type: 'temperature', value: 15 },
+  { date: '2024-11-22T08:00', type: 'humidity', value: 73 },
+  { date: '2024-11-22T12:00', type: 'temperature', value: 19 },
+  { date: '2024-11-22T12:00', type: 'humidity', value: 66 },
+  { date: '2024-11-22T18:00', type: 'temperature', value: 16 },
+  { date: '2024-11-22T18:00', type: 'humidity', value: 70 },
+  // 2024-11-21
+  { date: '2024-11-23T08:00', type: 'temperature', value: 15 },
+  { date: '2024-11-23T08:00', type: 'humidity', value: 73 },
+  { date: '2024-11-23T12:00', type: 'temperature', value: 19 },
+  { date: '2024-11-23T12:00', type: 'humidity', value: 66 },
+  { date: '2024-11-23T18:00', type: 'temperature', value: 16 },
+  { date: '2024-11-23T18:00', type: 'humidity', value: 70 },
 ];
 const initialState = {
   tempGraph: {
