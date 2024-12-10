@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import SettingsTabs from '../components/Settings/SettingsTabs';
 const SettingsPage = () => {
   return (
     <PageContainer>
@@ -10,8 +10,8 @@ const SettingsPage = () => {
       </PageHeader>
       
       <PageContent>
-        {/* Settings content will go here */}
-      </PageContent>
+        <SettingsTabs/>
+      </PageContent>  
     </PageContainer>
   );
 };

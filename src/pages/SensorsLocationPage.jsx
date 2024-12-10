@@ -1,6 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import SensorsTable from '../components/data/tables/SensorsTable';
+import MapView from '../components/common/MapView';
+
+const sensorData = {
+  latitude: 34.657511152221616,
+  longitude: -1.907805076441269,
+  sensorName: 'Temperature Sensor 01',
+  sensorTemperature: 22.5,
+  sensorHumidity: 55,
+};
 
 const SensorsLocationPage = () => {
   return (
@@ -9,9 +18,16 @@ const SensorsLocationPage = () => {
         <Title>Sensors Location</Title>
         <Subtitle>View and manage sensor locations</Subtitle>
       </PageHeader>
-      
+
       <PageContent>
         <SensorsTable />
+        <MapView
+          latitude={sensorData.latitude}
+          longitude={sensorData.longitude}
+          sensorName={sensorData.sensorName}
+          sensorTemperature={sensorData.sensorTemperature}
+          sensorHumidity={sensorData.sensorHumidity}
+        />
       </PageContent>
     </PageContainer>
   );
@@ -38,7 +54,9 @@ const Subtitle = styled.p`
 `;
 
 const PageContent = styled.div`
-  margin-top: 2rem;
+  display: flex;
+  gap: 1rem; /* Adds space between SensorsTable and MapView */
+  align-items: flex-start; /* Aligns items at the top */
 `;
 
 export default SensorsLocationPage;
