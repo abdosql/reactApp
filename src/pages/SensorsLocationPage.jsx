@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import SensorsTable from '../components/data/tables/SensorsTable';
 
 const SensorsLocationPage = () => {
   return (
@@ -10,7 +11,7 @@ const SensorsLocationPage = () => {
       </PageHeader>
       
       <PageContent>
-        {/* Map or location content will go here */}
+        <SensorsTable />
       </PageContent>
     </PageContainer>
   );
@@ -37,8 +38,7 @@ const Subtitle = styled.p`
 `;
 
 const PageContent = styled.div`
-  display: grid;
-  gap: 1.5rem;
+  margin-top: 2rem;
 `;
 
-export default SensorsLocationPage; 
+export default SensorsLocationPage;

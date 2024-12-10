@@ -9,6 +9,9 @@ import AlertsHistoryPage from './pages/AlertsHistoryPage';
 import OperateursPage from './pages/OperateursPage';
 import SettingsPage from './pages/SettingsPage';
 import AuthContainer from './components/Auth/AuthContainer';
+import SensorDetails from './components/data/SensorDetails';
+import AlertDetails from './components/data/AlertDetails';
+import OperatorDetails from './components/data/OperatorDetails';
 
 const AppLayout = ({ children }) => {
   return (
@@ -28,6 +31,9 @@ function App() {
           <Route path="/temperature" element={<TemperaturePage />} />
           <Route path="/humidity" element={<HumidityPage />} />
           <Route path="/sensors-location" element={<SensorsLocationPage />} />
+          <Route path="/sensors/:id" element={<SensorDetails />} />
+          <Route path="/alerts/:id" element={<AlertDetails />} />
+          <Route path="/operators/:id" element={<OperatorDetails />} />
           <Route path="/alerts-history" element={<AlertsHistoryPage />} />
           <Route path="/operateurs" element={<OperateursPage />} />
           <Route path="/settings" element={<SettingsPage />} />

@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import Table from '../../common/Table';
 import AddButton from '../../common/AddButton';
 import styled from 'styled-components';
-import { RiEditLine, RiDeleteBinLine } from 'react-icons/ri';
+import { RiEditLine, RiDeleteBinLine, RiEyeLine } from 'react-icons/ri';
 import AddItemModal from '../../modals/AddItemModal';
 import EditModal from '../../modals/EditModal';
 import DeleteModal from '../../modals/DeleteModal';
 
 const SensorsTable = () => {
+  const navigate = useNavigate();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
@@ -20,6 +22,23 @@ const SensorsTable = () => {
     { header: 'Last Reading', accessor: 'lastReading' },
     { header: 'Status', accessor: 'status',
       render: (row) => <StatusBadge status={row.status}>{row.status}</StatusBadge>
+    },
+    {
+      header: 'Actions',
+      accessor: 'actions',
+      render: (row) => (
+        <ActionButtons>
+          <ActionButton onClick={() => navigate(`/sensors/${row.id}`)} title="View Details">
+            <RiEyeLine />
+          </ActionButton>
+          <ActionButton onClick={() => handleEditClick(row)} title="Edit">
+            <RiEditLine />
+          </ActionButton>
+          <ActionButton onClick={() => handleDeleteClick(row)} title="Delete">
+            <RiDeleteBinLine />
+          </ActionButton>
+        </ActionButtons>
+      )
     }
   ];
 
@@ -56,29 +75,21 @@ const SensorsTable = () => {
     setIsDeleteModalOpen(false);
   };
 
-  const actions = (row) => (
-    <>
-      <ActionButton onClick={() => {
-        setSelectedItem(row);
-        setIsEditModalOpen(true);
-      }}>
-        <RiEditLine />
-      </ActionButton>
-      <ActionButton danger onClick={() => {
-        setSelectedItem(row);
-        setIsDeleteModalOpen(true);
-      }}>
-        <RiDeleteBinLine />
-      </ActionButton>
-    </>
-  );
+  const handleEditClick = (row) => {
+    setSelectedItem(row);
+    setIsEditModalOpen(true);
+  };
+
+  const handleDeleteClick = (row) => {
+    setSelectedItem(row);
+    setIsDeleteModalOpen(true);
+  };
 
   return (
     <TableContainer>
       <Table 
         columns={columns} 
         data={data} 
-        actions={actions}
         onRowClick={(row) => console.log('Row clicked:', row)}
       />
       
@@ -149,17 +160,33 @@ const StatusBadge = styled.span`
   };
 `;
 
+const ActionButtons = styled.div`
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+`;
+
 const ActionButton = styled.button`
   background: none;
   border: none;
-  padding: 0.5rem;
+  color: #4a5568;
   cursor: pointer;
-  color: ${props => props.danger ? '#dc3545' : '#8d72e1'};
-  transition: opacity 0.2s;
+  padding: 0.25rem;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s;
 
   &:hover {
-    opacity: 0.7;
+    color: #2d3748;
+    background-color: #e2e8f0;
+  }
+
+  svg {
+    width: 1.25rem;
+    height: 1.25rem;
   }
 `;
 
-export default SensorsTable; 
+export default SensorsTable;
