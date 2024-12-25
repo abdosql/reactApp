@@ -70,7 +70,7 @@ const Graph = ({ data, type, period, dateRange }) => {
     } else {
       Object.entries(processedData).sort().forEach(([date, types]) => {
         chartData.push({
-          date: new Date(date).getTime(),
+          date: new Date(date).getTime(), // Convertissez les dates en timestamp (UTC)
           temperature: types.temperature 
             ? types.temperature.total / types.temperature.count 
             : null,
@@ -78,6 +78,8 @@ const Graph = ({ data, type, period, dateRange }) => {
             ? types.humidity.total / types.humidity.count 
             : null
         });
+        
+        
       });
     }
     return chartData;
@@ -87,7 +89,8 @@ const Graph = ({ data, type, period, dateRange }) => {
     if (active && payload && payload.length) {
       return (
         <CustomTooltip>
-          <TooltipText>{`Time: ${new Date(label).toLocaleString()}`}</TooltipText>
+          {/* Affiche la date et l'heure en UTC */}
+          <TooltipText>{`Date & Time: ${new Date(label).toISOString().split('T').join(' ').slice(0, 16)}`}</TooltipText>
           {payload.map((pld, index) => (
             <TooltipValue key={index} color={pld.color}>
               {`${pld.name}: ${pld.value?.toFixed(1) || 'N/A'}`}
@@ -98,7 +101,7 @@ const Graph = ({ data, type, period, dateRange }) => {
     }
     return null;
   };
-
+  
   const NoDataMessage = () => (
     <NoDataMessageContainer>
       <div className="text-center">
@@ -132,11 +135,13 @@ const Graph = ({ data, type, period, dateRange }) => {
               domain={['dataMin', 'dataMax']}
               scale="time"
               tickFormatter={(timestamp) => {
-                const date = new Date(timestamp);
+                const date = new Date(timestamp); // Interprétez le timestamp correctement
                 return isSingleDaySelection()
-                  ? date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-                  : date.toLocaleDateString([], { month: 'short', day: 'numeric' });
+                ? date.toISOString().split('T')[1].slice(0, 5) // Affiche l'heure si un seul jour
+                  : date.toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }); // Affiche "12 déc"
               }}
+              
+              
               label={{
                 value: 'Date',
                 position: 'insideBottomRight',

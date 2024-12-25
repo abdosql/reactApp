@@ -10,14 +10,17 @@ export const CalendarContainer = styled.div`
 `;
 
 export const ButtonContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  margin-bottom: 1rem;
+margin-left:15px;
+  display: grid;
+  grid-template-columns: auto 1fr; /* Le conteneur gauche prend la taille de son contenu, et le droit s'étend */
+  align-items: center;
+  gap: 0.5rem; /* Ajuste l'espacement entre les colonnes */
+   margin-bottom: 1rem;
 `;
 
+
 export const PeriodButton = styled.button`
-  padding: 0.5rem 1rem;
+  padding: 0.4rem 0.8rem;
   font-size: 0.875rem;
   font-weight: 500;
   border-radius: 9999px;
@@ -30,6 +33,71 @@ export const PeriodButton = styled.button`
     color: white;
   }
 `;
+export const YearButton = styled.button`
+  background: #8d9eff;
+  border: none;
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.3s ease;
+  display: flex; /* Aligne les éléments en ligne */
+  align-items: center; /* Aligne verticalement */
+  justify-content: center; /* Centre horizontalement */
+  gap: 0.25rem; /* Ajuste l'espace entre le texte et la flèche */
+
+  &:hover {
+    background: #7c8cd0;
+  }
+    
+`;
+
+
+export const YearDropdown = styled.div`
+  position: absolute;
+  top: 40px; 
+  left: 0;
+  background: white;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  padding: 0.5rem 0;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+  min-width: 100px; 
+`;
+
+export const YearOption = styled.div`
+  padding: 0.5rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+
+  &:hover {
+    background: #f7fafc;
+  }
+`;
+export const LeftContainer = styled.div`
+  flex: 0; /* Désactive la prise d'espace supplémentaire */
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  position: relative; /* Nécessaire pour le dropdown */
+  margin-right: 0; /* Supprime l'espace après le bouton */
+  width: auto; /* Assure que la largeur dépend de son contenu */
+`;
+
+
+
+export const RightContainer = styled.div`
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start; /* Assure un alignement naturel à gauche */
+  gap: 1rem; /* Réduit l'espacement entre les boutons */
+  margin-left: 20px; /* Supprime toute marge supplémentaire */
+`;
+
 
 export const CalendarGlobalStyles = createGlobalStyle`
   .fc {
@@ -91,4 +159,8 @@ export const CalendarGlobalStyles = createGlobalStyle`
   min-height: 1em; 
   position: relative;
 }
+  .fc-toolbar-chunk {
+  margin: 0 !important; /* Réduit les marges des sections */
+}
+
 `;
