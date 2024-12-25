@@ -11,16 +11,9 @@ import OperatorsTable from '../components/data/tables/OperatorsTable';
 import SensorsTable from '../components/data/tables/SensorsTable';
 import TempHum from '../components/dashboard/Graphs/TempHumGraph';
 
-const initialData = [
-  // Old initialData remains untouched
-  { date: '2024-11-15T08:00', type: 'temperature', value: 16 },
-  { date: '2024-11-15T08:00', type: 'humidity', value: 70 },
-  //... Other existing initial data entries
-];
-
 const initialState = {
   tempHum: {
-    data: initialData,
+    data: [],
     dateRange: {
       start: new Date(new Date().setDate(new Date().getDate() - 6)).toISOString(),
       end: new Date().toISOString(),
@@ -31,8 +24,12 @@ const initialState = {
 
 const dashboardReducer = (state, action) => {
   switch (action.type) {
+    case 'SET_TEMP_HUM_DATA':
+      return { ...state, tempHum: { ...state.tempHum, data: action.payload } };
     case 'UPDATE_TEMP_HUM_TYPE':
       return { ...state, tempHum: { ...state.tempHum, selectedType: action.payload } };
+    case 'UPDATE_TEMP_HUM_DATE_RANGE':
+      return { ...state, tempHum: { ...state.tempHum, dateRange: action.payload } };
     default:
       return state;
   }
@@ -46,15 +43,36 @@ const DashboardPage = () => {
 
   // Fetch backend data
   useEffect(() => {
-    fetch('http://localhost:8000/api/enregistrements/')
-      .then((response) => response.json())
-      .then((apiData) => {
-        setData(apiData);
-        if (apiData.length > 0) {
-          setLatestRecord(apiData[0]);
+    const fetchData = async () => {
+      try {
+        const response = await fetch('http://localhost:8000/api/enregistrements/');
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
         }
-      })
-      .catch((error) => console.error('Error fetching data:', error));
+        const result = await response.json();
+
+        // Filter data for the last 7 days
+        const sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 6));
+        const recentData = result.filter(item => new Date(item.date_enregistrement) >= sevenDaysAgo);
+
+        // Format data for temp and hum
+        const formattedData = recentData.flatMap((item) => [
+          { date: item.date_enregistrement, type: 'temperature', value: item.temperature },
+          { date: item.date_enregistrement, type: 'humidity', value: item.humidite },
+        ]);
+
+        dispatch({ type: 'SET_TEMP_HUM_DATA', payload: formattedData });
+        setData(recentData);
+        if (recentData.length > 0) {
+          setLatestRecord(recentData[0]);
+        }
+      } catch (error) {
+        console.error('Error fetching data:', error);
+        alert('Failed to load data. Please try again later.');
+      }
+    };
+
+    fetchData();
   }, []);
 
   // Calculate averages
@@ -76,6 +94,10 @@ const DashboardPage = () => {
 
   const handleTypeChange = (newType) => {
     dispatch({ type: 'UPDATE_TEMP_HUM_TYPE', payload: newType });
+  };
+
+  const handleDateRangeChange = (dateRange) => {
+    dispatch({ type: 'UPDATE_TEMP_HUM_DATE_RANGE', payload: dateRange });
   };
 
   return (
@@ -108,6 +130,7 @@ const DashboardPage = () => {
             dateRange={state.tempHum.dateRange}
             selectedType={state.tempHum.selectedType}
             onTypeChange={handleTypeChange}
+            onDateRangeChange={handleDateRangeChange}
           />
         </Section>
 

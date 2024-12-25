@@ -1,27 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction';
-import { CalendarContainer, ButtonContainer, PeriodButton, CalendarGlobalStyles } from '../../../styles/components/CalendarStyles';
+import {
+  CalendarContainer,
+  ButtonContainer,
+  PeriodButton,
+  CalendarGlobalStyles,
+  LeftContainer,
+  RightContainer,
+  YearButton,
+  YearDropdown,
+  YearOption,
+} from '../../../styles/components/CalendarStyles';
 
 const Calendar = ({ id, onDateSelect }) => {
   const [selectedPeriod, setSelectedPeriod] = useState('week');
+  const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
+  const [isYearDropdownOpen, setIsYearDropdownOpen] = useState(false);
+
+  // Référence pour détecter les clics en dehors du menu
+  const dropdownRef = useRef(null);
+
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+        setIsYearDropdownOpen(false); // Fermer le menu si on clique en dehors
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   const handleRangeSelect = (info) => {
     const { start, end } = info;
-    const isSameDay = start.toDateString() === new Date(end.getTime() - 1).toDateString();
     const endDate = new Date(end);
-    endDate.setDate(end.getDate() - 1);
+    endDate.setDate(endDate.getDate() - 1);
     endDate.setHours(23, 59, 59, 999);
 
     setSelectedPeriod('range');
-    onDateSelect(
-      {
-        start: start.toISOString(),
-        end: endDate.toISOString()
-      },
-      'range'
-    );
+    onDateSelect({ start: start.toISOString(), end: endDate.toISOString() }, 'range');
   };
 
   const handleDateClick = (info) => {
@@ -30,13 +52,7 @@ const Calendar = ({ id, onDateSelect }) => {
     endDate.setHours(23, 59, 59, 999);
 
     setSelectedPeriod('day');
-    onDateSelect(
-      {
-        start: clickedDate.toISOString(),
-        end: endDate.toISOString()
-      },
-      'day'
-    );
+    onDateSelect({ start: clickedDate.toISOString(), end: endDate.toISOString() }, 'day');
   };
 
   const handlePeriodSelect = (period) => {
@@ -74,18 +90,43 @@ const Calendar = ({ id, onDateSelect }) => {
     return { start: start.toISOString(), end: end.toISOString() };
   };
 
+  const handleYearSelect = (year) => {
+    setSelectedYear(year);
+    setIsYearDropdownOpen(false); // Close dropdown after selecting
+    const start = `${year}-01-01T00:00:00.000Z`;
+    const end = `${year}-12-31T23:59:59.999Z`;
+    onDateSelect({ start, end }, 'year');
+  };
+
   return (
     <CalendarContainer>
       <ButtonContainer>
-        <PeriodButton isSelected={selectedPeriod === 'today'} onClick={() => handlePeriodSelect('today')}>
-          Today
-        </PeriodButton>
-        <PeriodButton isSelected={selectedPeriod === 'week'} onClick={() => handlePeriodSelect('week')}>
-          This Week
-        </PeriodButton>
-        <PeriodButton isSelected={selectedPeriod === 'month'} onClick={() => handlePeriodSelect('month')}>
-          This Month
-        </PeriodButton>
+        <LeftContainer>
+          <YearButton onClick={() => setIsYearDropdownOpen(!isYearDropdownOpen)}>
+            {selectedYear} ▼
+          </YearButton>
+          {isYearDropdownOpen && (
+            <YearDropdown ref={dropdownRef}>
+              {Array.from({ length: 10 }, (_, i) => (
+                <YearOption key={i} onClick={() => handleYearSelect(2024 - i)}>
+                  {2024 - i}
+                </YearOption>
+              ))}
+            </YearDropdown>
+          )}
+        </LeftContainer>
+
+        <RightContainer>
+          <PeriodButton isSelected={selectedPeriod === 'today'} onClick={() => handlePeriodSelect('today')}>
+            Today
+          </PeriodButton>
+          <PeriodButton isSelected={selectedPeriod === 'week'} onClick={() => handlePeriodSelect('week')}>
+            This Week
+          </PeriodButton>
+          <PeriodButton isSelected={selectedPeriod === 'month'} onClick={() => handlePeriodSelect('month')}>
+            This Month
+          </PeriodButton>
+        </RightContainer>
       </ButtonContainer>
 
       <div className="calendar-container flex justify-center">
@@ -99,11 +140,11 @@ const Calendar = ({ id, onDateSelect }) => {
           headerToolbar={{
             left: 'prev',
             center: 'title',
-            right: 'next'
+            right: 'next',
           }}
           buttonText={{
             prev: '‹',
-            next: '›'
+            next: '›',
           }}
           height="auto"
         />
