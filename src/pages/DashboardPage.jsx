@@ -10,6 +10,7 @@ import AlertTable from '../components/data/tables/AlertTable';
 import OperatorsTable from '../components/data/tables/OperatorsTable';
 import SensorsTable from '../components/data/tables/SensorsTable';
 import TempHum from '../components/dashboard/Graphs/TempHumGraph';
+import MapView from '../components/common/MapView';
 
 const initialState = {
   tempHum: {
@@ -140,15 +141,19 @@ const DashboardPage = () => {
           <AlertTable />
         </Section>
 
-        <Section>
-          <SectionTitle>Sensors Overview</SectionTitle>
-          <SensorsTable />
-        </Section>
+
 
         <Section>
           <SectionTitle>Active Operators</SectionTitle>
           <OperatorsTable />
         </Section>
+
+        <SectionMap>
+          <MapView   style={{ width: "100%", height: "100%" }}
+  center={[51.505, -0.09]} // Example center
+  zoom={13}/>
+        </SectionMap>
+
       </PageContent>
     </PageContainer>
   );
@@ -191,5 +196,15 @@ const SectionTitle = styled.h2`
   font-size: 1.25rem;
   font-weight: 500;
 `;
+
+const SensorsInfo = styled.h2`
+
+`;
+
+const SectionMap = styled.h2`
+
+`;
+
+
 
 export default DashboardPage;
