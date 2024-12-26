@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Table from '../../common/Table';
 import styled from 'styled-components';
@@ -8,94 +8,138 @@ import AddItemModal from '../../modals/AddItemModal';
 import EditModal from '../../modals/EditModal';
 import DeleteModal from '../../modals/DeleteModal';
 
-const OperatorsTable = () => {
+const UsersTable = () => {
   const navigate = useNavigate();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [data, setData] = useState([]);
 
-  const columns = [
-    { header: 'Operator ID', accessor: 'id' },
-    { header: 'Name', accessor: 'name' },
-    { header: 'Role', accessor: 'role' },
-    { header: 'Department', accessor: 'department' },
-    { header: 'Status', accessor: 'status',
-      render: (row) => <StatusBadge status={row.status}>{row.status}</StatusBadge>
-    },
-    {
-      header: 'Actions',
-      accessor: 'actions',
-      render: (row) => (
-        <ActionButtons>
-          <ActionButton onClick={() => navigate(`/operators/${row.id}`)} title="View Details">
-            <RiEyeLine />
-          </ActionButton>
-          <ActionButton onClick={() => handleEditClick(row)} title="Edit">
-            <RiEditLine />
-          </ActionButton>
-          <ActionButton onClick={() => handleDeleteClick(row)} title="Delete">
-            <RiDeleteBinLine />
-          </ActionButton>
-        </ActionButtons>
-      )
+  // Fetch data from API
+  const fetchData = async () => {
+    try {
+      const response = await fetch('http://localhost:8000/api/operateurs/');
+      if (!response.ok) throw new Error('Failed to fetch data');
+      const result = await response.json();
+      setData(result);
+    } catch (error) {
+      console.error('Error fetching data:', error);
     }
-  ];
-
-  const data = [
-    {
-      id: 'OPR-001',
-      name: 'John Doe',
-      role: 'Senior Technician',
-      department: 'Maintenance',
-      status: 'Active'
-    },
-    // Add more sample data as needed
-  ];
-
-  const fields = [
-    { name: 'name', label: 'Name', required: true },
-    { name: 'role', label: 'Role', required: true },
-    { name: 'department', label: 'Department', required: true },
-  ];
-
-  const handleAdd = (formData) => {
-    console.log('Adding:', formData);
-    setIsAddModalOpen(false);
   };
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  // Add operator
+  const handleAdd = async (formData) => {
+    try {
+      const response = await fetch('http://localhost:8000/api/operateurs/', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) throw new Error('Failed to add operator');
+      fetchData();
+      setIsAddModalOpen(false);
+    } catch (error) {
+      console.error('Error adding operator:', error);
+    }
+  };
+  
+  const handleEdit = async (formData) => {
+    try {
+      const response = await fetch(`http://localhost:8000/api/operateurs/${formData.id_utilisateur}/`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
+      });
+      if (!response.ok) throw new Error('Failed to edit operator');
+      console.log('Item edited successfully');
+      fetchData(); // Recharge les données après modification
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error('Error editing operator:', error);
+    }
+  };
+  
+
+  const handleDelete = async () => {
+    console.log('Delete action triggered for:', selectedItem); 
+    try {
+      const response = await fetch(`http://localhost:8000/api/operateurs/${selectedItem.id_utilisateur}/`, {
+        method: 'DELETE',
+      });
+      
+      if (!response.ok) throw new Error('Failed to delete operator');
+      console.log('Item deleted successfully');
+      fetchData(); 
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting operator:', error); 
+    }
+  };
+  
+  
+  
 
   const handleEditClick = (row) => {
     setSelectedItem(row);
     setIsEditModalOpen(true);
   };
 
-  const handleEdit = (formData) => {
-    console.log('Editing:', formData);
-    setIsEditModalOpen(false);
-  };
-
   const handleDeleteClick = (row) => {
+    console.log('Selected item for deletion:', row); 
     setSelectedItem(row);
     setIsDeleteModalOpen(true);
   };
+  
 
-  const handleDelete = () => {
-    console.log('Deleting:', selectedItem);
-    setIsDeleteModalOpen(false);
-  };
+  const columns = [
+    { header: 'First Name', accessor: 'nom' },
+    { header: 'Last Name', accessor: 'prenom' },
+    { header: 'Email', accessor: 'email' },
+    { header: 'Phone', accessor: 'telephone' },
+    { header: 'Role', accessor: 'role' },
+    { header: 'Telegram ID', accessor: 'id_telegram' },
+    {
+      header: 'Actions',
+      accessor: 'actions',
+      render: (row) => (
+        <ActionButtons>
+          <ActionButton onClick={() => navigate(`/operators/${row.id_utilisateur}`)} title="View Details">
+  <RiEyeLine />
+</ActionButton>
 
+          <ActionButton onClick={() => handleEditClick(row)} title="Edit">
+            <RiEditLine />
+          </ActionButton>
+          <ActionButton onClick={() => handleDeleteClick(row)} title="Delete">
+  <RiDeleteBinLine />
+</ActionButton>
+
+        </ActionButtons>
+      ),
+    },
+  ];
+
+  const fields = [
+    { name: 'nom', label: 'First Name', required: true },
+    { name: 'prenom', label: 'Last Name', required: true },
+    { name: 'email', label: 'Email', required: true },
+    { name: 'telephone', label: 'Phone' },
+    { name: 'role', label: 'Role', required: true },
+    { name: 'mot_de_passe', label: 'Password', required: true }, 
+    { name: 'id_telegram', label: 'Telegram ID' },
+  ];
+  
   return (
     <TableContainer>
-      <Table 
-        columns={columns} 
-        data={data}
-      />
-      
+      <Table columns={columns} data={data} />
+
       <TableFooter>
-        <AddButton 
-          onClick={() => setIsAddModalOpen(true)} 
-          label="Add Operator"
-        />
+        <AddButton onClick={() => setIsAddModalOpen(true)} label="Add Operator" />
       </TableFooter>
 
       <AddItemModal
@@ -105,20 +149,22 @@ const OperatorsTable = () => {
         fields={fields}
       />
 
-      <EditModal
-        isOpen={isEditModalOpen}
-        onClose={() => setIsEditModalOpen(false)}
-        onSubmit={handleEdit}
-        fields={fields}
-        initialData={selectedItem}
-      />
+<EditModal
+  isOpen={isEditModalOpen}
+  onClose={() => setIsEditModalOpen(false)}
+  onSubmit={handleEdit}
+  fields={fields.filter(field => field.name !== 'mot_de_passe')} 
+  initialData={selectedItem}
+/>
 
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={handleDelete}
-        itemName={selectedItem?.name}
-      />
+
+<DeleteModal
+  isOpen={isDeleteModalOpen}
+  onClose={() => setIsDeleteModalOpen(false)}
+  onConfirm={handleDelete} 
+  itemName={`${selectedItem?.nom} ${selectedItem?.prenom}`}
+/>
+
     </TableContainer>
   );
 };
@@ -168,17 +214,4 @@ const ActionButton = styled.button`
   }
 `;
 
-const StatusBadge = styled.span`
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
-  font-size: 0.75rem;
-  font-weight: 500;
-  background-color: ${props => 
-    props.status === 'Active' ? 'rgba(40, 167, 69, 0.1)' : 'rgba(108, 117, 125, 0.1)'
-  };
-  color: ${props => 
-    props.status === 'Active' ? '#28a745' : '#6c757d'
-  };
-`;
-
-export default OperatorsTable;
+export default UsersTable;
