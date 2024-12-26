@@ -1,40 +1,45 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import ShowPage from '../common/ShowPage';
 
 const OperatorDetails = () => {
   const navigate = useNavigate();
   const { id } = useParams();
+  const [operatorData, setOperatorData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  // Mock data for demonstration - replace with actual data fetching
-  const operatorData = {
-    "Operator ID": id,
-    "Full Name": "John Doe",
-    "Role": "Senior Technician",
-    "Status": "Active",
-    "Email": "john.doe@example.com",
-    "Phone": "+1 234 567 8900",
-    "Department": "Maintenance",
-    "Shift": "Morning (6:00 AM - 2:00 PM)",
-    "Access Level": "Level 3",
-    "Assigned Zones": "Zone A, Zone B",
-    "Last Login": "2024-12-10 08:15:00",
-    "Join Date": "2023-01-15",
-    "Certifications": "HVAC, Industrial Safety",
-    "Emergency Contact": "+1 234 567 8901"
-  };
+  useEffect(() => {
+    const fetchOperatorDetails = async () => {
+      try {
+        const response = await fetch(`http://localhost:8000/api/operateurs/${id}/`);
+        if (!response.ok) throw new Error('Failed to fetch operator details');
+        const data = await response.json();
+        setOperatorData(data);
+        setLoading(false);
+      } catch (err) {
+        setError(err.message);
+        setLoading(false);
+      }
+    };
+
+    fetchOperatorDetails();
+  }, [id]);
 
   const breadcrumbItems = [
     { label: 'Dashboard', path: '/' },
     { label: 'Operators', path: '/operators' },
-    { label: id, path: `/operators/${id}` }
+    { label: `Operator #${id}`, path: `/operators/${id}` }
   ];
+
+  if (loading) return <div>Loading...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
     <ShowPage
       title="Operator Details"
       data={operatorData}
-      onBack={() => navigate('/operators')}
+      onBack={() => navigate('/operateurs')}
       breadcrumbItems={breadcrumbItems}
     />
   );
