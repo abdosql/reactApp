@@ -47,4 +47,18 @@ export const Dropdown = styled.select`
   }
 `;
 
+export const RoleText = styled.div`
+    font-size: 14px;
+    color: #555;
+    margin-left: 10px;
+    font-weight: bold;
+`;
 
+export const Card = styled.div`
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  padding: 16px;
+  margin-bottom: 16px;
+  background: #f9f9f9;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+`;
