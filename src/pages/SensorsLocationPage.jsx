@@ -3,13 +3,6 @@ import styled from 'styled-components';
 import SensorsTable from '../components/data/tables/SensorsTable';
 import MapView from '../components/common/MapView';
 
-const sensorData = {
-  latitude: 34.657511152221616,
-  longitude: -1.907805076441269,
-  sensorName: 'Temperature Sensor 01',
-  sensorTemperature: 22.5,
-  sensorHumidity: 55,
-};
 
 const SensorsLocationPage = () => {
   return (
@@ -21,13 +14,7 @@ const SensorsLocationPage = () => {
 
       <PageContent>
         <SensorsTable />
-        <MapView
-          latitude={sensorData.latitude}
-          longitude={sensorData.longitude}
-          sensorName={sensorData.sensorName}
-          sensorTemperature={sensorData.sensorTemperature}
-          sensorHumidity={sensorData.sensorHumidity}
-        />
+        <MapView />
       </PageContent>
     </PageContainer>
   );
