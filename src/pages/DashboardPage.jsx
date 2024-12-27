@@ -11,7 +11,7 @@ import OperatorsTable from '../components/data/tables/OperatorsTable';
 import SensorsTable from '../components/data/tables/SensorsTable';
 import TempHum from '../components/dashboard/Graphs/TempHumGraph';
 import MapView from '../components/common/MapView';
-
+import { BASE_URL } from '../config';
 const initialState = {
   tempHum: {
     data: [],
@@ -46,7 +46,7 @@ const DashboardPage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/enregistrements/');
+        const response = await fetch(`${BASE_URL}/api/enregistrements/`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

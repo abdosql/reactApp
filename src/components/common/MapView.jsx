@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import { MapTitle, MapSection, PopupTitle, PopupElement, PopupName, PopupLocation } from '../../styles/components/MapViewStyles';
-
+import { BASE_URL } from '../../config';
 const MapView = () => {
   const [sensorData, setSensorData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -10,7 +10,7 @@ const MapView = () => {
   useEffect(() => {
     const fetchSensorData = async () => {
       try {
-        const response = await fetch('http://127.0.0.1:8000/api/sensor-data/');
+        const response = await fetch(`${BASE_URL}/api/sensor-data/`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

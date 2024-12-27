@@ -7,7 +7,7 @@ import AddButton from '../../common/AddButton';
 import AddItemModal from '../../modals/AddItemModal';
 import EditModal from '../../modals/EditModal';
 import DeleteModal from '../../modals/DeleteModal';
-
+import { BASE_URL } from '../../../config';
 const UsersTable = () => {
   const navigate = useNavigate();
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -19,7 +19,7 @@ const UsersTable = () => {
   // Fetch data from API
   const fetchData = async () => {
     try {
-      const response = await fetch('http://localhost:8000/api/operateurs/');
+      const response = await fetch(`${BASE_URL}/api/operateurs/`);
       if (!response.ok) throw new Error('Failed to fetch data');
       const result = await response.json();
       setData(result);
