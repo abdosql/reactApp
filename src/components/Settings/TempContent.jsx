@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { TempContainer, InputRow, Label, SaveButton, InputLine, LabelTitle } from '../../styles/components/TempContentStyles';
 import { useState } from "react";
 import { NumberInputDefault } from "./NumberInputDefault";
-
+import { BASE_URL } from '../../config';
 const TempContent = () => {
   const [minValue1, setMinValue1] = useState(0);
   const [maxValue1, setMaxValue1] = useState(100);
@@ -15,7 +15,7 @@ const TempContent = () => {
   useEffect(() => {
     const fetchThresholds = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/temperature-thresholds/');
+        const response = await fetch(`${BASE_URL}/api/temperature-thresholds/`);
         const thresholds = await response.json();
         
         thresholds.forEach(threshold => {
@@ -58,7 +58,7 @@ const TempContent = () => {
     ];
 
     try {
-      const response = await fetch('http://localhost:8000/api/temperature-thresholds/', {
+      const response = await fetch(`${BASE_URL}/api/temperature-thresholds/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
