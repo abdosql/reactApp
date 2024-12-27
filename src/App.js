@@ -25,9 +25,9 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/login" element={<AuthContainer />} />
+      <Route path="/" element={<AuthContainer />} />
         <Route element={<AppLayout />}>
-          <Route path="/" element={<DashboardPage />} />
+        <Route path="/DashboardPage" element={<DashboardPage />} />
           <Route path="/temperature" element={<TemperaturePage />} />
           <Route path="/humidity" element={<HumidityPage />} />
           <Route path="/sensors-location" element={<SensorsLocationPage />} />
