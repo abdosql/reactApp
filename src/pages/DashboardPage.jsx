@@ -41,7 +41,7 @@ const DashboardPage = () => {
   const [data, setData] = useState([]); // API Data state
   const [latestRecord, setLatestRecord] = useState(null); // Latest record from API
   const [timeSinceUpdate, setTimeSinceUpdate] = useState(0);
-
+  const [role, setRole] = useState(''); // Role state
   // Fetch backend data
   useEffect(() => {
     const fetchData = async () => {
@@ -52,11 +52,9 @@ const DashboardPage = () => {
         }
         const result = await response.json();
 
-        // Filter data for the last 7 days
         const sevenDaysAgo = new Date(new Date().setDate(new Date().getDate() - 6));
         const recentData = result.filter(item => new Date(item.date_enregistrement) >= sevenDaysAgo);
 
-        // Format data for temp and hum
         const formattedData = recentData.flatMap((item) => [
           { date: item.date_enregistrement, type: 'temperature', value: item.temperature },
           { date: item.date_enregistrement, type: 'humidity', value: item.humidite },
@@ -76,7 +74,6 @@ const DashboardPage = () => {
     fetchData();
   }, []);
 
-  // Calculate averages
   const calculateAverage = (type) => {
     const filtered = data.filter((item) => item[type]);
     if (filtered.length === 0) return 0;
@@ -85,7 +82,6 @@ const DashboardPage = () => {
     return (total / filtered.length).toFixed(1);
   };
 
-  // Increment timeSinceUpdate logic
   useEffect(() => {
     const interval = setInterval(() => {
       setTimeSinceUpdate((prev) => (prev < 20 ? prev + 1 : 0));
@@ -100,7 +96,21 @@ const DashboardPage = () => {
   const handleDateRangeChange = (dateRange) => {
     dispatch({ type: 'UPDATE_TEMP_HUM_DATE_RANGE', payload: dateRange });
   };
+// Fetch user role
+useEffect(() => {
+  const fetchUserRole = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/user-role`);
+      if (!response.ok) throw new Error('Failed to fetch user role');
+      const result = await response.json();
+      setRole(result.role); // Assuming result.role contains the user role
+    } catch (error) {
+      console.error('Error fetching user role:', error);
+    }
+  };
 
+  fetchUserRole();
+  }, []);
   return (
     <PageContainer>
       <PageHeader>
@@ -109,7 +119,6 @@ const DashboardPage = () => {
       </PageHeader>
 
       <PageContent>
-        {/* Stats Cards Section */}
         <CardsSection>
           <TemperatureCard
             value={latestRecord ? latestRecord.temperature : 'N/A'}
@@ -123,7 +132,6 @@ const DashboardPage = () => {
           <AverageHumidityCard value={calculateAverage('humidite')} />
         </CardsSection>
 
-        {/* Graph Section */}
         <Section>
           <SectionTitle>Temperature & Humidity Overview</SectionTitle>
           <TempHum
@@ -135,7 +143,6 @@ const DashboardPage = () => {
           />
         </Section>
 
-        {/* Existing Tables */}
         <Section>
           <SectionTitle>Recent Alerts</SectionTitle>
           <AlertTable />
@@ -143,10 +150,6 @@ const DashboardPage = () => {
 
 
 
-        <Section>
-          <SectionTitle>Active Operators</SectionTitle>
-          <OperatorsTable />
-        </Section>
 
         <SectionMap>
           <MapView   style={{ width: "100%", height: "100%" }}

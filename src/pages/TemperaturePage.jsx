@@ -1,7 +1,7 @@
 import React, { useReducer, useEffect } from 'react';
 import styled from 'styled-components';
 import TempGraph from '../components/dashboard/Graphs/TemperatureGraph';
-
+import { BASE_URL } from '../config'; 
 const tempReducer = (state, action) => {
   switch (action.type) {
     case 'SET_TEMP_DATA':
@@ -30,7 +30,7 @@ const TemperaturePage = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('http://localhost:8000/api/enregistrements/');
+        const response = await fetch(`${BASE_URL}/api/enregistrements/`);
         if (!response.ok) {
           throw new Error(`HTTP error! status: ${response.status}`);
         }

@@ -21,20 +21,33 @@ const Graph = ({ data, type, period, dateRange }) => {
   };
 
   const filterDataByDateRange = (data, startDate, endDate) => {
-    const start = new Date(startDate).getTime();
-    const end = new Date(endDate).getTime();
+    const start = normalizeDate(startDate).getTime();
+    const end = normalizeDate(endDate).getTime();
     return data.filter(d => {
-      const date = new Date(d.date).getTime();
+      const date = normalizeDate(d.date).getTime();
       return date >= start && date <= end;
     });
   };
+  
+const normalizeDate = (dateString) => {
+  if (!dateString) return null; 
+  if (!isNaN(Date.parse(dateString))) {
+    return new Date(dateString); 
+  }
+  const [day, month, year] = dateString.split('/');
+  if (!day || !month || !year) {
+    throw new Error(`Invalid date format: ${dateString}`); 
+  }
+  return new Date(`${year}-${month}-${day}T00:00:00Z`);
+};
+
 
   const processData = () => {
     if (!dateRange) return [];
     const filteredData = filterDataByDateRange(data, dateRange.start, dateRange.end);
     if (isSingleDaySelection()) {
       return filteredData.reduce((acc, item) => {
-        const timeKey = new Date(item.date).getTime();
+        const timeKey = normalizeDate(item.date).getTime();
         if (!acc[timeKey]) {
           acc[timeKey] = {};
         }
@@ -43,7 +56,7 @@ const Graph = ({ data, type, period, dateRange }) => {
       }, {});
     }
     return filteredData.reduce((acc, item) => {
-      const day = item.date.split('T')[0];
+      const day = normalizeDate(item.date).toISOString().split('T')[0];
       if (!acc[day]) {
         acc[day] = {};
       }
@@ -55,6 +68,7 @@ const Graph = ({ data, type, period, dateRange }) => {
       return acc;
     }, {});
   };
+  
 
   const prepareChartData = () => {
     const processedData = processData();
@@ -70,38 +84,55 @@ const Graph = ({ data, type, period, dateRange }) => {
     } else {
       Object.entries(processedData).sort().forEach(([date, types]) => {
         chartData.push({
-          date: new Date(date).getTime(), // Convertissez les dates en timestamp (UTC)
-          temperature: types.temperature 
-            ? types.temperature.total / types.temperature.count 
+          date: normalizeDate(date).getTime(),
+          temperature: types.temperature
+            ? types.temperature.total / types.temperature.count
             : null,
-          humidity: types.humidity 
-            ? types.humidity.total / types.humidity.count 
+          humidity: types.humidity
+            ? types.humidity.total / types.humidity.count
             : null
-        });
-        
-        
+        });        
       });
     }
     return chartData;
   };
+  
 
   const CustomTooltipComponent = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
-      return (
-        <CustomTooltip>
-          {/* Affiche la date et l'heure en UTC */}
-          <TooltipText>{`Date & Time: ${new Date(label).toISOString().split('T').join(' ').slice(0, 16)}`}</TooltipText>
-          {payload.map((pld, index) => (
-            <TooltipValue key={index} color={pld.color}>
-              {`${pld.name}: ${pld.value?.toFixed(1) || 'N/A'}`}
-            </TooltipValue>
-          ))}
-        </CustomTooltip>
-      );
+      try {
+        const date = new Date(label);
+        if (isNaN(date.getTime())) {
+          throw new Error('Date invalide');
+        }
+  
+        return (
+          <CustomTooltip>
+            <TooltipText>{`Date: ${date.toLocaleDateString('fr-FR', {
+              day: 'numeric',
+              month: 'short',
+              year: 'numeric'
+            })}`}</TooltipText>
+            {payload.map((pld, index) => (
+              <TooltipValue key={index} color={pld.color}>
+                {`${pld.name}: ${pld.value?.toFixed(1) || 'N/A'}`}
+              </TooltipValue>
+            ))}
+          </CustomTooltip>
+        );
+      } catch (error) {
+        console.error('Erreur dans CustomTooltipComponent :', error.message);
+        return (
+          <CustomTooltip>
+            <TooltipText>Date invalide</TooltipText>
+          </CustomTooltip>
+        );
+      }
     }
     return null;
   };
   
+
   const NoDataMessage = () => (
     <NoDataMessageContainer>
       <div className="text-center">
@@ -130,25 +161,32 @@ const Graph = ({ data, type, period, dateRange }) => {
             </defs>
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis
-              dataKey="date"
-              type="number"
-              domain={['dataMin', 'dataMax']}
-              scale="time"
-              tickFormatter={(timestamp) => {
-                const date = new Date(timestamp); // Interprétez le timestamp correctement
-                return isSingleDaySelection()
-                ? date.toISOString().split('T')[1].slice(0, 5) // Affiche l'heure si un seul jour
-                  : date.toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }); // Affiche "12 déc"
-              }}
-              
-              
-              label={{
-                value: 'Date',
-                position: 'insideBottomRight',
-                offset: -10,
-                style: { fontSize: 14, fontWeight: 'bold' }
-              }}
-            />
+  dataKey="date"
+  type="number"
+  domain={['dataMin', 'dataMax']}
+  scale="time"
+  tickFormatter={(timestamp) => {
+    try {
+      const date = new Date(timestamp);
+      if (isNaN(date.getTime())) {
+        throw new Error('Invalid timestamp');
+      }
+      return isSingleDaySelection()
+        ? date.toISOString().split('T')[1].slice(0, 5) 
+        : date.toLocaleDateString('fr-FR', { month: 'short', day: 'numeric' }); 
+    } catch (error) {
+      console.error('Erreur dans XAxis tickFormatter :', error.message);
+      return 'Date invalide';
+    }
+  }}
+  label={{
+    value: 'Date',
+    position: 'insideBottomRight',
+    offset: -10,
+    style: { fontSize: 14, fontWeight: 'bold' }
+  }}
+/>
+
             <YAxis
               label={{
                 value: 'Value',
