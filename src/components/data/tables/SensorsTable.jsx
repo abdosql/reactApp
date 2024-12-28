@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Table from '../../common/Table';
 import AddButton from '../../common/AddButton';
@@ -7,6 +7,7 @@ import { RiEditLine, RiDeleteBinLine, RiEyeLine } from 'react-icons/ri';
 import AddItemModal from '../../modals/AddItemModal';
 import EditModal from '../../modals/EditModal';
 import DeleteModal from '../../modals/DeleteModal';
+import { BASE_URL } from '../../../config.js'; 
 
 const SensorsTable = () => {
   const navigate = useNavigate();
@@ -14,10 +15,36 @@ const SensorsTable = () => {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState(null);
+  const [data, setData] = useState([]);
+
+  // Fetch sensor data from the backend
+  useEffect(() => {
+    const fetchSensorsData = async () => {
+      try {
+        const response = await fetch(`${BASE_URL}/api/sensors-data/`);  
+        const result = await response.json();
+        // Process and set the data for table
+        const formattedData = result.map(sensor => ({
+          id: sensor.id,
+          latitude: `${sensor.latitude}`,
+          longitude: `${sensor.longitude}`,
+          type: 'Temperature and Humidity',  
+          lastReading: `${sensor.lastReading.split(' - ')[0]}°C  ${sensor.lastReading.split(' - ')[1]}%`,
+          status: 'Active'  
+        }));
+        setData(formattedData);
+      } catch (error) {
+        console.error('Error fetching sensor data:', error);
+      }
+    };
+
+    fetchSensorsData();
+  }, []);
 
   const columns = [
     { header: 'Sensor ID', accessor: 'id' },
-    { header: 'Location', accessor: 'location' },
+    { header: 'Latitude', accessor: 'latitude' },
+    { header: 'Longitude', accessor: 'longitude' },
     { header: 'Type', accessor: 'type' },
     { header: 'Last Reading', accessor: 'lastReading' },
     { header: 'Status', accessor: 'status',
@@ -28,7 +55,7 @@ const SensorsTable = () => {
       accessor: 'actions',
       render: (row) => (
         <ActionButtons>
-          <ActionButton onClick={() => navigate(`/sensors/${row.id}`)} title="View Details">
+          <ActionButton onClick={() => navigate(`/sensors-details/${row.id}`)} title="View Details">
             <RiEyeLine />
           </ActionButton>
           <ActionButton onClick={() => handleEditClick(row)} title="Edit">
@@ -42,38 +69,139 @@ const SensorsTable = () => {
     }
   ];
 
-  const data = [
-    {
-      id: 'SENS-001',
-      location: 'Zone A',
-      type: 'Temperature',
-      lastReading: '25°C',
+// Move this function outside useEffect
+const fetchSensorsData = async () => {
+  try {
+    const response = await fetch(`${BASE_URL}/api/sensors-data/`);  
+    const result = await response.json();
+
+    const formattedData = result.map(sensor => ({
+      id: sensor.id,
+      name: sensor.name,
+      latitude: `${sensor.latitude}`,
+      longitude: `${sensor.longitude}`,
+      type: 'Temperature and Humidity',  
+      lastReading: sensor.lastReading !== "N/A"
+        ? `${sensor.lastReading.split(' - ')[0]}°C  ${sensor.lastReading.split(' - ')[1]}%`
+        : "No Data",
       status: 'Active'
-    },
-    // Add more sample data as needed
-  ];
+    }));
+    setData(formattedData);
+  } catch (error) {
+    console.error('Error fetching sensor data:', error);
+  }
+};
 
-  const fields = [
-    { name: 'id', label: 'Sensor ID', required: true },
-    { name: 'location', label: 'Location', required: true },
-    { name: 'type', label: 'Type', required: true },
-  ];
-
-  const handleAdd = (formData) => {
-    console.log('Adding:', formData);
-    // Implement add logic
+useEffect(() => {
+  fetchSensorsData();
+}, []);
+  
+  const handleAdd = async (formData) => {
+    const payload = {
+      nom_capteur: formData.id,
+      latitude: parseFloat(formData.latitude),
+      longitude: parseFloat(formData.longitude),
+    };
+  
+    try {
+      const response = await fetch(`${BASE_URL}/api/sensors/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("Error details:", error);
+        throw new Error("Failed to add sensor");
+      }
+  
+      const newSensor = await response.json();
+  
+      // Map the new sensor data to match the table format
+      const formattedSensor = {
+        id: newSensor.id,
+        name: payload.nom_capteur, // Add the name field
+        latitude: `${newSensor.latitude}`,
+        longitude: `${newSensor.longitude}`,
+        type: "Temperature and Humidity",
+        lastReading: "No Data",
+        status: "Active",
+      };
+  
+      // Update the data state to include the new sensor
+      setData((prevData) => [...prevData, formattedSensor]);
+      
+      // Fetch fresh data to ensure everything is in sync
+      fetchSensorsData();
+      
+      setIsAddModalOpen(false);
+    } catch (error) {
+      console.error("Error adding sensor:", error);
+    }
   };
+  
+  
 
-  const handleEdit = (formData) => {
-    console.log('Editing:', formData);
-    // Implement edit logic
+  const handleEdit = async (formData) => {
+    // Prepare the payload according to your serializer format
+    const payload = {
+      nom_capteur: formData.name,
+      latitude: parseFloat(formData.latitude),
+      longitude: parseFloat(formData.longitude),
+    };
+  
+    try {
+      // Use the correct endpoint from your urls.py
+      const response = await fetch(`${BASE_URL}/api/sensors/${formData.id}/`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
+  
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("Error details:", error);
+        throw new Error("Failed to edit sensor");
+      }
+  
+      // After successful edit, fetch fresh data
+      await fetchSensorsData();
+      setIsEditModalOpen(false);
+    } catch (error) {
+      console.error('Error editing sensor:', error);
+    }
   };
+  
 
-  const handleDelete = () => {
-    console.log('Deleting:', selectedItem);
-    // Implement delete logic
-    setIsDeleteModalOpen(false);
+  const handleDelete = async () => {
+    try {
+      // Use the correct endpoint from your urls.py
+      const response = await fetch(`${BASE_URL}/api/sensors/delete/${selectedItem.id}/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+        }
+      });
+  
+      if (!response.ok) {
+        const error = await response.json();
+        console.error("Error details:", error);
+        throw new Error("Failed to delete sensor");
+      }
+  
+      // After successful deletion, fetch fresh data
+      await fetchSensorsData();
+      setIsDeleteModalOpen(false);
+    } catch (error) {
+      console.error('Error deleting sensor:', error);
+    }
   };
+  
 
   const handleEditClick = (row) => {
     setSelectedItem(row);
@@ -84,6 +212,12 @@ const SensorsTable = () => {
     setSelectedItem(row);
     setIsDeleteModalOpen(true);
   };
+
+  const fields = [
+    { label: 'Sensor Name', name: 'id', type: 'text' },
+    { label: 'Latitude', name: 'latitude', type: 'text' },
+    { label: 'Longitude', name: 'longitude', type: 'text' },
+  ];
 
   return (
     <TableContainer>
