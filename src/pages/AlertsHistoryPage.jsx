@@ -6,8 +6,8 @@ const AlertsHistoryPage = () => {
   return (
     <PageContainer>
       <PageHeader>
-        <Title>Alerts History</Title>
-        <Subtitle>View and manage system alerts</Subtitle>
+        <Title>Incidents History</Title>
+        <Subtitle>View and manage system Incidents and Alarms History</Subtitle>
       </PageHeader>
       
       <PageContent>

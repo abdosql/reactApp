@@ -41,7 +41,7 @@ const DashboardPage = () => {
   const [data, setData] = useState([]); // API Data state
   const [latestRecord, setLatestRecord] = useState(null); // Latest record from API
   const [timeSinceUpdate, setTimeSinceUpdate] = useState(0);
-  const [role, setRole] = useState(''); // Role state
+
   // Fetch backend data
   useEffect(() => {
     const fetchData = async () => {
@@ -96,21 +96,10 @@ const DashboardPage = () => {
   const handleDateRangeChange = (dateRange) => {
     dispatch({ type: 'UPDATE_TEMP_HUM_DATE_RANGE', payload: dateRange });
   };
-// Fetch user role
-useEffect(() => {
-  const fetchUserRole = async () => {
-    try {
-      const response = await fetch(`${BASE_URL}/api/user-role`);
-      if (!response.ok) throw new Error('Failed to fetch user role');
-      const result = await response.json();
-      setRole(result.role); // Assuming result.role contains the user role
-    } catch (error) {
-      console.error('Error fetching user role:', error);
-    }
-  };
 
-  fetchUserRole();
-  }, []);
+
+
+
   return (
     <PageContainer>
       <PageHeader>
