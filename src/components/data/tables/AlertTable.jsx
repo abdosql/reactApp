@@ -1,85 +1,80 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Table from '../../common/Table';
 import styled from 'styled-components';
-import { RiEditLine, RiDeleteBinLine, RiEyeLine } from 'react-icons/ri';
-import DeleteModal from '../../modals/DeleteModal';
+import { RiEyeLine } from 'react-icons/ri';
+import { BASE_URL } from '../../../config.js'; 
 
 const AlertTable = () => {
   const navigate = useNavigate();
-  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
-  const [selectedItem, setSelectedItem] = useState(null);
+  const [incidents, setIncidents] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchIncidents();
+  }, []);
+
+  const fetchIncidents = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/incidents-history/`);
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const data = await response.json();
+      setIncidents(data);
+    } catch (error) {
+      console.error('Error fetching incidents:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const columns = [
-    { header: 'Alert ID', accessor: 'id' },
-    { header: 'Type', accessor: 'type' },
-    { header: 'Severity', accessor: 'severity',
-      render: (row) => <SeverityBadge severity={row.severity}>{row.severity}</SeverityBadge>
+    { header: 'Incident ID', accessor: 'id_incident' },
+    { header: 'Sensor ID', accessor: 'sensor_id' },
+    { header: 'Detected Temperature', accessor: 'temperature_detectee' },
+    { 
+      header: 'Severity', 
+      accessor: 'type_incident',
+      render: (row) => <SeverityBadge severity={row.type_incident || 'Unknown'}>{row.type_incident || 'Unknown'}</SeverityBadge>
     },
-    { header: 'Timestamp', accessor: 'timestamp' },
-    { header: 'Status', accessor: 'status',
-      render: (row) => <StatusBadge status={row.status}>{row.status}</StatusBadge>
+    { 
+      header: 'Start Date', 
+      accessor: 'debut_incident',
+      render: (row) => new Date(row.debut_incident).toLocaleString()
+    },
+    { 
+      header: 'End Date', 
+      accessor: 'fin_incident',
+      render: (row) => row.fin_incident ? new Date(row.fin_incident).toLocaleString() : '-'
     },
     {
-      header: 'Actions',
-      accessor: 'actions',
+      header: 'Details',
+      accessor: 'details',
       render: (row) => (
         <ActionButtons>
-          <ActionButton onClick={() => navigate(`/alerts/${row.id}`)} title="View Details">
+          <ActionButton onClick={() => navigate(`/alerts/${row.id_incident}`)} title="View Details">
             <RiEyeLine />
-          </ActionButton>
-          <ActionButton onClick={() => handleEditClick(row)} title="Edit">
-            <RiEditLine />
-          </ActionButton>
-          <ActionButton onClick={() => handleDeleteClick(row)} title="Delete">
-            <RiDeleteBinLine />
           </ActionButton>
         </ActionButtons>
       )
     }
   ];
 
-  const data = [
-    {
-      id: 'ALT-001',
-      type: 'Temperature High',
-      severity: 'Critical',
-      timestamp: '2024-12-10 14:30:00',
-      status: 'Active'
-    },
-    // Add more sample data as needed
-  ];
-
-  const handleDeleteClick = (row) => {
-    setSelectedItem(row);
-    setIsDeleteModalOpen(true);
-  };
-
-  const handleDelete = () => {
-    console.log('Deleting:', selectedItem);
-    setIsDeleteModalOpen(false);
-  };
-
-  const handleEditClick = (row) => {
-    console.log('Editing:', row);
-  };
+  if (loading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <TableContainer>
       <Table 
         columns={columns} 
-        data={data}
-      />
-
-      <DeleteModal
-        isOpen={isDeleteModalOpen}
-        onClose={() => setIsDeleteModalOpen(false)}
-        onConfirm={handleDelete}
-        itemName={selectedItem?.id}
+        data={incidents}
       />
     </TableContainer>
   );
 };
+
 
 const TableContainer = styled.div`
   background: white;
@@ -139,8 +134,8 @@ const SeverityBadge = styled.span`
     switch (props.severity.toLowerCase()) {
       case 'critical':
         return 'rgba(220, 53, 69, 0.1)';
-      case 'high':
-        return 'rgba(255, 193, 7, 0.1)';
+      case 'severe':
+        return 'rgba(255, 193, 7, 0.27)';
       case 'medium':
         return 'rgba(23, 162, 184, 0.1)';
       default:
@@ -151,7 +146,7 @@ const SeverityBadge = styled.span`
     switch (props.severity.toLowerCase()) {
       case 'critical':
         return '#dc3545';
-      case 'high':
+      case 'severe':
         return '#ffc107';
       case 'medium':
         return '#17a2b8';
