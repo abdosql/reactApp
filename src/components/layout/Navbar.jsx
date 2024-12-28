@@ -11,6 +11,7 @@ import {
 import NotificationDropdown from '../dropdowns/NotificationDropdown';
 import ProfileDropdown from '../dropdowns/ProfileDropdown';
 import useClickOutside from '../../hooks/useClickOutside';
+import { useNavigate } from 'react-router-dom';
 
 const Navbar = () => {
   const [isNotifOpen, setIsNotifOpen] = useState(false);
@@ -36,6 +37,8 @@ const Navbar = () => {
     }
   ]);
 
+  const navigate = useNavigate();
+
   const closeNotifications = useCallback(() => setIsNotifOpen(false), []);
   const closeProfile = useCallback(() => setIsProfileOpen(false), []);
 
@@ -48,9 +51,30 @@ const Navbar = () => {
     ));
   };
 
-  const handleLogout = () => {
-    console.log('Logout clicked');
+  const handleLogout = async () => {
+    try {
+      // Clear frontend session state
+      sessionStorage.clear();
+  
+      // Optional: Notify the backend to clear the session
+      const response = await fetch('/api/logout/', {
+        method: 'POST',
+        credentials: 'include', // Include cookies for session handling
+      });
+  
+      if (response.ok) {
+        console.log('Backend session cleared');
+      } else {
+        console.error('Failed to clear backend session');
+      }
+    } catch (err) {
+      console.error('Error during logout:', err);
+    } finally {
+      // Redirect to the login page
+      navigate('/');
+    }
   };
+  
 
   return (
     <NavbarWrapper>
@@ -80,7 +104,7 @@ const Navbar = () => {
           </ProfileSection>
           <ProfileDropdown 
             isOpen={isProfileOpen}
-            onLogout={handleLogout}
+            onLogout={handleLogout} 
           />
         </div>
       </NavActions>
@@ -88,4 +112,4 @@ const Navbar = () => {
   );
 };
 
-export default Navbar; 
+export default Navbar;
