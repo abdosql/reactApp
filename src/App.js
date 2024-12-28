@@ -31,7 +31,7 @@ function App() {
           <Route path="/temperature" element={<TemperaturePage />} />
           <Route path="/humidity" element={<HumidityPage />} />
           <Route path="/sensors-location" element={<SensorsLocationPage />} />
-          <Route path="/sensors/:id" element={<SensorDetails />} />
+          <Route path="/sensors-details/:id" element={<SensorDetails />} />
           <Route path="/alerts/:id" element={<AlertDetails />} />
           <Route path="/operators/:id" element={<OperatorDetails />} />
           <Route path="/alerts-history" element={<AlertsHistoryPage />} />
