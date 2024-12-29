@@ -12,7 +12,10 @@ import AuthContainer from './components/Auth/AuthContainer';
 import SensorDetails from './components/data/SensorDetails';
 import AlertDetails from './components/data/AlertDetails';
 import OperatorDetails from './components/data/OperatorDetails';
+
 import IncidentPage from './pages/IncidentPage'; 
+import EnregistrementForm from './pages/EnregistrementForm';
+
 const AppLayout = ({ children }) => {
   return (
     <Layout>
@@ -31,13 +34,14 @@ function App() {
           <Route path="/temperature" element={<TemperaturePage />} />
           <Route path="/humidity" element={<HumidityPage />} />
           <Route path="/sensors-location" element={<SensorsLocationPage />} />
-          <Route path="/sensors/:id" element={<SensorDetails />} />
+          <Route path="/sensors-details/:id" element={<SensorDetails />} />
           <Route path="/alerts/:id" element={<AlertDetails />} />
           <Route path="/operators/:id" element={<OperatorDetails />} />
           <Route path="/alerts-history" element={<AlertsHistoryPage />} />
           <Route path="/operateurs" element={<OperateursPage />} />
           <Route path="/settings" element={<SettingsPage />} />
           <Route path="/incident-page" element={<IncidentPage />} />
+          <Route path="/add-enregistrement" element={<EnregistrementForm />} />
         </Route>
       </Routes>
     </Router>
