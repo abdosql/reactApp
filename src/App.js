@@ -12,6 +12,7 @@ import AuthContainer from './components/Auth/AuthContainer';
 import SensorDetails from './components/data/SensorDetails';
 import AlertDetails from './components/data/AlertDetails';
 import OperatorDetails from './components/data/OperatorDetails';
+import EnregistrementForm from './pages/EnregistrementForm';
 
 const AppLayout = ({ children }) => {
   return (
@@ -37,6 +38,7 @@ function App() {
           <Route path="/alerts-history" element={<AlertsHistoryPage />} />
           <Route path="/operateurs" element={<OperateursPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/add-enregistrement" element={<EnregistrementForm />} />
         </Route>
       </Routes>
     </Router>
