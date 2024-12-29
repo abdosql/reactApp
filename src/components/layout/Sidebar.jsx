@@ -16,6 +16,7 @@ import {
   NavItems,
   NavItem,
 } from '../../styles/components/SidebarStyles';
+import { RiFileAddLine} from 'react-icons/ri';
 
 const Sidebar = () => {
   const navigate = useNavigate();
@@ -55,6 +56,12 @@ const Sidebar = () => {
             </NavItem>
           </>
         )}
+        <NavItem 
+          active={isActive('/add-enregistrement')} 
+          onClick={() => navigate('/add-enregistrement')}
+        >
+          <RiFileAddLine /> Add Enregistrement
+        </NavItem>
       </NavItems>
     </SidebarWrapper>
   );
