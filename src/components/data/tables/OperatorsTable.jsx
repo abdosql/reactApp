@@ -35,7 +35,7 @@ const UsersTable = () => {
   // Add operator
   const handleAdd = async (formData) => {
     try {
-      const response = await fetch('http://localhost:8000/api/operateurs/', {
+      const response = await fetch(`${BASE_URL}/api/operateurs/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -50,7 +50,7 @@ const UsersTable = () => {
   
   const handleEdit = async (formData) => {
     try {
-      const response = await fetch(`http://localhost:8000/api/operateurs/${formData.id_utilisateur}/`, {
+      const response = await fetch(`${BASE_URL}/api/operateurs/${formData.id_utilisateur}/`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(formData),
@@ -68,7 +68,7 @@ const UsersTable = () => {
   const handleDelete = async () => {
     console.log('Delete action triggered for:', selectedItem); 
     try {
-      const response = await fetch(`http://localhost:8000/api/operateurs/${selectedItem.id_utilisateur}/`, {
+      const response = await fetch(`${BASE_URL}/api/operateurs/${selectedItem.id_utilisateur}/`, {
         method: 'DELETE',
       });
       

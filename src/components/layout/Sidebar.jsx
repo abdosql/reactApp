@@ -7,6 +7,7 @@ import {
   RiHistoryLine,
   RiTeamLine,
   RiSettings4Line,
+  RiAlertLine,
 } from 'react-icons/ri';
 import { useNavigate, useLocation } from 'react-router-dom';
 import Logo from '../common/Logo';
@@ -41,6 +42,9 @@ const Sidebar = () => {
         </NavItem>
         <NavItem active={isActive('/sensors-location')} onClick={() => navigate('/sensors-location')}>
           <RiMapPinLine /> Sensors Location
+        </NavItem>
+        <NavItem active={isActive('/incident-page')} onClick={() => navigate('/incident-page')}>
+          <RiAlertLine /> Incidents
         </NavItem>
         <NavItem active={isActive('/alerts-history')} onClick={() => navigate('/alerts-history')}>
           <RiHistoryLine /> Alerts History

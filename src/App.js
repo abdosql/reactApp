@@ -12,7 +12,7 @@ import AuthContainer from './components/Auth/AuthContainer';
 import SensorDetails from './components/data/SensorDetails';
 import AlertDetails from './components/data/AlertDetails';
 import OperatorDetails from './components/data/OperatorDetails';
-
+import IncidentPage from './pages/IncidentPage'; 
 const AppLayout = ({ children }) => {
   return (
     <Layout>
@@ -37,6 +37,7 @@ function App() {
           <Route path="/alerts-history" element={<AlertsHistoryPage />} />
           <Route path="/operateurs" element={<OperateursPage />} />
           <Route path="/settings" element={<SettingsPage />} />
+          <Route path="/incident-page" element={<IncidentPage />} />
         </Route>
       </Routes>
     </Router>
